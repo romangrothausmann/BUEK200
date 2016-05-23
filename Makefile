@@ -32,7 +32,7 @@ TK200_DTKNR.out : b200_gk3.shp b200_gk3.shx b200_gk3.dbf b200_gk3.prj # extract 
 buek200_%.zip :
 	-wget https://download.bgr.de/bgr/Boden/BUEK200/$*/pdf/buek200_$*.zip
 
-buek200_%.pdf : | buek200_%.zip # order only as buek200_%.zip: has no deps
+buek200_%.pdf : buek200_%.zip # $< expands to '' if made order-only
 	ln -sf `unzip -o $< 'buek200_*pdf' | grep 'extracting:' | awk '{print $$2}'` $@
 	-chmod a-x `readlink $@`
 
@@ -40,8 +40,9 @@ buek200_%.pdf : | buek200_%.zip # order only as buek200_%.zip: has no deps
 buek200_shp_%.zip :
 	-wget https://download.bgr.de/bgr/Boden/BUEK200/$*/shp/buek200_$*.zip -O $@
 
-buek200_shp_%/ : | buek200_shp_%.zip
-	unzip -u -d $@ $< 'buek200_$**'
+buek200_shp_%/ : buek200_shp_%.zip # $< expands to '' if made order-only
+	find -name $< -size 0 -exec rm -v {} \;
+	-test -e $< && unzip -u -d $@ $< 'buek200_$**'
 
 
 #prevent removal of any intermediate files http://stackoverflow.com/questions/5426934/why-this-makefile-removes-my-goal https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html

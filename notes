@@ -1,0 +1,26 @@
+
+list TK Blattschnitte (MTB: Messtischblatt == TK25):
+http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=6&gdz_anz_zeile=2&gdz_unt_zeile=2&gdz_user_id=0
+
+shapefiles for TK Blattschnitte in GK3 (Gauß-Krüger-Abbildung im 3. Meridianstreifen):
+http://www.geodatenzentrum.de/uebersichten/netze_gk3.zip
+
+TK200:
+ogrinfo -al b200_gk3.shp | grep DTKNR | grep -o [0-9]* | wc -l
+
+TK25 GK3 (Gauß-Krüger-Abbildung im 3. Meridianstreifen):
+ogrinfo -al -geom=No b25_gk3.dbf | less
+
+BUEK overview:
+https://download.bgr.de/bgr/Boden/BUEK200/Indexkarte/Indexkarte_BUEK200.pdf
+
+DTK200-V (Digitale Topographische Karte 1:200.000, Vorläufige Ausgabe):
+http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=5&gdz_anz_zeile=1&gdz_unt_zeile=5&gdz_user_id=0
+
+e.g. GK3 multi-layer (~1 GB):
+http://www.geodatenzentrum.de/auftrag/img/gdz/diskett2.gif
+
+Specks:
+http://sg.geodatenzentrum.de/web_download/dtk/dtk200-v/dtk200-v.pdf
+
+
