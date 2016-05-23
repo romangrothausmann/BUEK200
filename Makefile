@@ -1,11 +1,12 @@
 
 
-BUEKs= $(shell cat TK200_DTKNR.out | egrep -v '1510|1526|1542') # ignore un-planned CCs, see https://download.bgr.de/bgr/Boden/BUEK200/Indexkarte/Indexkarte_BUEK200.pdf
+CCs= $(shell cat TK200_DTKNR.out | egrep -v '1510|1526|1542') # ignore un-planned CCs, see https://download.bgr.de/bgr/Boden/BUEK200/Indexkarte/Indexkarte_BUEK200.pdf
 
-BUEKs:= $(BUEKs:%=buek200_%.pdf)
+BUEKs= $(CCs:%=buek200_%.pdf)
+BUEKSHPs= $(CCs:%=buek200_shp_%/)
 
 
-.PHONY: all getAll
+.PHONY: all getAll getAllSHPs
 
 
 all : TK200_DTKNR.out # first get list of TK200 Blattschnitte, then get PDFs accordingly
@@ -14,6 +15,7 @@ all : TK200_DTKNR.out # first get list of TK200 Blattschnitte, then get PDFs acc
 
 getAll : $(BUEKs)
 
+getAllSHPs : $(BUEKSHPs)
 
 
 netz_dtk200_gk3.zip :
@@ -33,6 +35,13 @@ buek200_%.zip :
 buek200_%.pdf : | buek200_%.zip # order only as buek200_%.zip: has no deps
 	ln -sf `unzip -o $< 'buek200_*pdf' | grep 'extracting:' | awk '{print $$2}'` $@
 	-chmod a-x `readlink $@`
+
+
+buek200_shp_%.zip :
+	-wget https://download.bgr.de/bgr/Boden/BUEK200/$*/shp/buek200_$*.zip -O $@
+
+buek200_shp_%/ : | buek200_shp_%.zip
+	unzip -u -d $@ $< 'buek200_$**'
 
 
 #prevent removal of any intermediate files http://stackoverflow.com/questions/5426934/why-this-makefile-removes-my-goal https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
